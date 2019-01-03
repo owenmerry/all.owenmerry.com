@@ -11,6 +11,7 @@ https://coolors.co/e4572e-17bebb-ffc914-2e282a-76b041
 #76B041 
 
 #111116
+#181a1e
 */
 
 body,html{
@@ -19,7 +20,7 @@ body,html{
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color:#111116;
+    background-color:#181a1e;
     color:white;
 }
 
@@ -52,12 +53,14 @@ body,html{
     height:4em;
     z-index:100;
     text-align:right;
+    text-transform: lowercase;
 }
 .info ul{
     list-style-type: none;
     margin: 0;
     padding: 0;
-    font-size:1.3em;
+    font-size:1.5em;
+    font-weight: 700;
 }
 .info li{
     display: inline-block;
@@ -69,5 +72,36 @@ body,html{
     opacity:.7;
 }
 .info li:hover{
+    opacity:1;
+}
+.grid{
+    display:grid;
+    grid-template-columns: repeat(3,33.33%);
+    margin: 0 auto;
+    padding-top: 20vh;
+    max-width: 700px;
+}
+.grid .box{
+    display:flex;
+    flex-direction: column;
+    font-weight:700;
+    margin-bottom:8em;
+    padding-left:7em;
+    text-transform: lowercase;
+    letter-spacing: .1em;
+}
+.box h2{
+    font-size:2.2em;
+    margin-bottom:1.5em;
+}
+.box a{
+    color:white;
+    opacity:.3;
+    font-size:1.5em;
+    margin-bottom:1.3em;
+    text-decoration: none;
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.box a:hover{
     opacity:1;
 }
