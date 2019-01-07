@@ -108,14 +108,14 @@ class App {
             this.DOM.follow.style.top = pos.top;
             this.DOM.follow.style.left = pos.left;
 
-        var tlm = new TimelineMax({repeat:0,ease: this.config.animation.ease.power01});
+        // var tlm = new TimelineMax({repeat:0,ease: this.config.animation.ease.power01});
 
-            tlm
-            .to(this.DOM.follow,this.config.animation.speed.fast,{
-                top: pos.top,
-                left: pos.left,
-            },0)
-            ;
+        //     tlm
+        //     .to(this.DOM.follow,this.config.animation.speed.fast,{
+        //         top: pos.top,
+        //         left: pos.left,
+        //     },0)
+        //     ;
     }
 
     showFollow(){
