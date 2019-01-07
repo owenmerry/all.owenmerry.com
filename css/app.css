@@ -95,13 +95,21 @@ body,html{
     margin-bottom:1.5em;
 }
 .box a{
-    color:white;
-    opacity:.3;
+    color:rgba(255,255,255,.6);
     font-size:1.5em;
-    margin-bottom:1.3em;
+    padding-bottom:1.3em;
     text-decoration: none;
     transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
 }
 .box a:hover{
-    opacity:1;
+    color:rgba(255,255,255,1);
+}
+.follow{
+    display:none;
+    width:10em;
+    height:10em;
+    background-color:#E4572E;
+    position:absolute;
+    top:0;
+    left:0;
 }
