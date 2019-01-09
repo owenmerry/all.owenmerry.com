@@ -104,7 +104,7 @@ body,html{
 .box a:hover{
     color:rgba(255,255,255,1);
 }
-.follow{
+.hover-image{
     display:none;
     width:10em;
     height:10em;

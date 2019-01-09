@@ -1,20 +1,6 @@
 
 
-// get mouse position
-const getMousePos = (e) => {
-    let posx = 0;
-    let posy = 0;
-    if (!e) e = window.event;
-    if (e.pageX || e.pageY) {
-        posx = e.pageX;
-        posy = e.pageY;
-    }
-    else if (e.clientX || e.clientY) 	{
-        posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-        posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-    }
-    return { x : posx, y : posy }
-}
+
 
 
 class App {
@@ -55,8 +41,21 @@ class App {
 
         //start animations
         this.unlockAnimation();
+        this.buildStage();
         this.startStage();
         this.startListeners();
+    }
+
+    buildStage(){
+        this.DOM.links.forEach((link) => {
+            if(this.hasLinkDataImage(link)){
+                //create element
+                var newElement = document.createElement('div');
+                newElement.appendChild(document.createTextNode('image'));
+                link.appendChild(newElement);
+                link.querySelector('div').classList.add('hover-image');
+            }
+        });
     }
 
 
@@ -80,8 +79,9 @@ class App {
     startListeners(){
 
         this.mouseenterFn = (ev) => {
-            this.DOM.follow.style.display = `block`;
-            !this.isAnimationLocked() && this.showFollow();
+            const follow = this.getFollow(ev);
+            follow.style.display = `block`;
+            !this.isAnimationLocked() && this.showFollow(ev);
         }
 
         this.mousemoveFn = (ev) => {
@@ -89,13 +89,15 @@ class App {
         }
 
         this.mouseleaveFn = (ev) => {
-            this.hideFollow();
+            this.hideFollow(ev);
         }
 
         this.DOM.links.forEach((link) => {
-              link.addEventListener('mouseenter', this.mouseenterFn);
-              link.addEventListener('mouseleave', this.mouseleaveFn);
-              link.addEventListener('mousemove', this.mousemoveFn);
+            if(this.hasLinkDataImage(link)){
+                link.addEventListener('mouseenter', this.mouseenterFn);
+                link.addEventListener('mouseleave', this.mouseleaveFn);
+                link.addEventListener('mousemove', this.mousemoveFn);
+            }
         });
 
         //this.DOM.el.addEventListener('mousemove', this.mousemoveFn);
@@ -104,9 +106,10 @@ class App {
 
 
     moveFollow(ev){
+        const follow = this.getFollow(ev);
         const pos = this.getPosition(ev);
-            this.DOM.follow.style.top = pos.top;
-            this.DOM.follow.style.left = pos.left;
+        follow.style.top = pos.top;
+        follow.style.left = pos.left;
 
         // var tlm = new TimelineMax({repeat:0,ease: this.config.animation.ease.power01});
 
@@ -118,24 +121,31 @@ class App {
         //     ;
     }
 
-    showFollow(){
+    showFollow(ev){
+        const follow = this.getFollow(ev);
         //this.lockAnimation();
+        //ev.toElement.querySelector('.hover-image')
+        follow.style.border = "2px solid blue";
         var tls = new TimelineMax({onComplete: () => this.unlockAnimation(),repeat:0,ease: this.config.animation.ease.power01});
 
-            tls
-            .to(this.DOM.follow,this.config.animation.speed.fast,{
-                width: '10em',
-                autoAlpha: 1,
-            },0)
-            ;
+        tls
+        .add('begin')
+        .add(new TweenMax(follow, this.config.animation.speed.fast, {
+            ease: Sine.easeOut,
+            width: '10em',
+            autoAlpha: 1,
+        }), 'begin')
+        ;
     }
 
-    hideFollow(){
+    hideFollow(ev){
+        const follow = this.getFollow(ev);
        // this.lockAnimation();
+       
         var tlh = new TimelineMax({onComplete: () => this.unlockAnimation(),repeat:0,ease: this.config.animation.ease.power01});
 
         tlh
-        .to(this.DOM.follow,this.config.animation.speed.fast,{
+        .to(follow,this.config.animation.speed.fast,{
             width: '0em',
             autoAlpha: 0,
         },0)
@@ -149,7 +159,7 @@ class App {
 
 
     getPosition(ev){
-        const mousePos = getMousePos(ev);
+        const mousePos = this.getMousePos(ev);
         const docScrolls = {
             left : document.body.scrollLeft + document.documentElement.scrollLeft, 
             top : document.body.scrollTop + document.documentElement.scrollTop
@@ -160,19 +170,40 @@ class App {
         return { left : elementLeft, top : elementTop }
     }
 
+    // get mouse position
+    getMousePos(e){
+        let posx = 0;
+        let posy = 0;
+        if (!e) e = window.event;
+        if (e.pageX || e.pageY) {
+            posx = e.pageX;
+            posy = e.pageY;
+        }
+        else if (e.clientX || e.clientY) 	{
+            posx = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+            posy = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+        }
+        return { x : posx, y : posy }
+    }
+
     lockAnimation(){
-        console.log('locked..');
         this.animationLock = true;
     }
 
     unlockAnimation(){
-        console.log('unlocked..');
         this.animationLock = false;
     }
 
     isAnimationLocked(){
-        console.log('islocked? ' + (this.animationLock === true));
         return this.animationLock === true;
+    }
+
+    getFollow(ev){
+        return ev.toElement.querySelector('.hover-image');
+    }
+    
+    hasLinkDataImage(link){
+        return link.hasAttribute('data-image');
     }
 
 
